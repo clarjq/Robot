@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!--Clarence Quitazol-->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Robot</title>
+</head>
+<body>
+	<script>
+        //LIMIT 5x5 table, robot cannot fall off
+        const UPLIMIT = 5; 
+        const LOWLIMIT = 0;
+        var checkLimit =(num)=>{
+            if(num>UPLIMIT || num<LOWLIMIT){
+                return false;
+            }
+        }
+        //Robot Identifiers
+        var robots = [];
+        var roboCount = 0;
+        var activeRobot;
+        var activeRobotId;
+        //ROBOT Class
+        class Robot {
+            constructor(x,y,f){
+                //Error when over limit
+                if(x>UPLIMIT || x<LOWLIMIT){
+                    throw "ERROR, Please place the robot in the table";
+                }
+                if(y>UPLIMIT || y<LOWLIMIT){
+                    throw "ERROR, Please place the robot in the table";
+                }
+                this.x=x;
+                this.y=y;
+                this.f=f;
+                this.id= roboCount;
+                this.active=true;
+
+            }
+            //MOVE will move robot one unit forward in direction currently facing
+            moveRobot(){
+                var x,y,f;
+                //set everything to false before the move
+                for (let i = 0; i < robots.length; i++) {
+                    robots[i].active = false;
+                }
+                //Condition on where to move
+                if(this.f=="North"){
+                    y= this.y+1;
+                    if (checkLimit(y) != false){
+                        this.y= y;
+                    }
+                }else if(this.f=="South"){
+                    y=this.y-1;
+                    if (checkLimit(y) != false){
+                        this.y= y;
+                    }
+                }else if(this.f=="West"){
+                    x=this.x-1;
+                    if (checkLimit(x) != false){
+                        this.x=x;
+                    }
+                }else if(this.f=="East"){
+                    x=this.x+1;
+                    if (checkLimit(x) != false){
+                        this.x=x;
+                    }
+                }
+            }
+            //LEFT and RIGHT rotate 90 degrees robot is facing
+            left(){
+                if(this.f=="North"){
+                    this.f="West";
+                }else if(this.f=="South"){
+                    this.f="East";
+
+                }else if(this.f=="West"){
+                    this.f="South";                    
+                }else if(this.f=="East"){
+                    this.f="North";
+                }
+            }
+            right(){
+                if(this.f=="North"){
+                    this.f="East";
+                }else if(this.f=="South"){
+                    this.f="West";
+
+                }else if(this.f=="West"){
+                    this.f="North";                    
+                }else if(this.f=="East"){
+                    this.f="South";
+                }
+            }
+        }
+        //PLACE takes in position X Y F 
+        //placing robot to initial position
+        var placeRobot = (x,y,f)=>{
+            //set all other robots to false
+            if (robots.length == 0) {
+                // create new robot
+                robots[roboCount] = new Robot(x,y,f);  
+            }else{
+                robots[roboCount] = new Robot(x,y,f);
+                //make old ones false
+                for (let i = 0; i < roboCount; i++) {
+                    robots[i].active = false;
+                }
+            }
+            //id goes up
+            roboCount++;
+        }
+        //REPORT announces X Y and facing of the robot //BONUS How many robots, which robot is active
+        const report = (robot)=>{
+            console.log(`${robot.x}, ${robot.y}, ${robot.f}, ${robots.length} robots present, Robot ${activeRobot} is active`);
+        }
+        //Test Input A
+        // console.log("TEST A");
+        // placeRobot(0,0,"North");
+        // robots[activeRobotId].moveRobot();
+        // report(robots[activeRobotId]);
+
+        //Test Input B
+        // console.log("TEST B");
+        // placeRobot(0,0,"North");
+        // robots[activeRobotId].left();
+        // report(robots[activeRobotId]);
+
+        //Test Input C
+        //placeRobot(0,1,"North");
+        // console.log("TEST C");
+        // robots[activeRobotId].moveRobot();
+        // robots[activeRobotId].moveRobot();
+        // robots[activeRobotId].left();
+        // robots[activeRobotId].moveRobot();
+        // report(robots[activeRobotId]);
+    </script>
+</body>
+</html>
